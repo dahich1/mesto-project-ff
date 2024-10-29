@@ -2,7 +2,7 @@
 
 // функция открытия модального окна
 export const openModal = (popup) => {      
-  popup.classList.add('popup_is-opened', 'popup_is-animated');
+  popup.classList.add('popup_is-opened');
   document.addEventListener('keydown', closeEsc);
   popup.addEventListener('click', closePopup);
 }
@@ -11,13 +11,6 @@ export const closeModal = (popup) => {
   popup.classList.remove('popup_is-opened');
   document.removeEventListener('keydown', closeEsc);
   popup.removeEventListener('click', closePopup);
-}
-
-export const initClosePopups = () => {
-  const popups = document.querySelectorAll('.popup');
-  popups.forEach(popup => {
-      popup.addEventListener('click', closePopup)
-  });
 }
 
 // функция-обработчик события нажатия Esc
