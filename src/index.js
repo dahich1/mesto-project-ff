@@ -1,5 +1,5 @@
 import './pages/index.css';
-import {createCard, CardLike} from './components/card.js';
+import {createCard, cardLike} from './components/card.js';
 import {openModal, closeModal} from './components/modal.js';
 import {enableValidation, clearValidation} from './components/validation.js';
 import {addNewCard, editUserProfile, getInitialCard, getUserData, updateAvatar, deleteCard } from './components/api.js';
@@ -84,7 +84,7 @@ function handleNewPlaceSubmit(placesList, createCard) {
         const card = {name: cardNameInput.value, link: urlInput.value}
         addNewCard(card) 
         .then((element) => {
-            const newCard = createCard(element, CardLike, deleteMyCard, openCard, userId);
+            const newCard = createCard(element, cardLike, deleteMyCard, openCard, userId);
         placesList.prepend(newCard);
         formNewPlace.reset();
         closeModal(popupNewCard);
@@ -151,7 +151,7 @@ Promise.all([getInitialCard(), getUserData()])
             avatarImage.style.backgroundImage = `url(${data[1].avatar})`;
             
             data[0].forEach((element) => {
-                placesList.append(createCard(element, CardLike, deleteMyCard, openCard, userId ));
+                placesList.append(createCard(element, cardLike, deleteMyCard, openCard, userId ));
             })
 
     })

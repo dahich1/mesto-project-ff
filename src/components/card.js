@@ -3,7 +3,7 @@ import { openModal } from "./modal.js";
 import { addLike, deleteLike } from "./api.js";
 
 // Создание карточки
-export function createCard (element, CardLike, deleteMyCard, openCard, userId) {
+export function createCard (element, cardLike, deleteMyCard, openCard, userId) {
     const cardTemplate = document.querySelector('#card-template');
     const cardElement = cardTemplate.content.querySelector('.places__item').cloneNode(true);
     const cardTitle = cardElement.querySelector('.card__title');
@@ -28,7 +28,7 @@ export function createCard (element, CardLike, deleteMyCard, openCard, userId) {
     }
 
     cardLikeButton.addEventListener('click', function() {
-        CardLike(cardLikeButton, cardId, cardLikesCounter);
+        cardLike(cardLikeButton, cardId, cardLikesCounter);
     });
 
     cardImage.addEventListener('click', function() {
@@ -39,7 +39,7 @@ export function createCard (element, CardLike, deleteMyCard, openCard, userId) {
 }
 
 // Обработчик лайка карточки
-export function CardLike (cardLikeButton, cardId, cardLikesCounter) {
+export function cardLike (cardLikeButton, cardId, cardLikesCounter) {
   const likes = cardLikeButton.classList.contains('card__like-button_is-active') ? deleteLike : addLike;
   likes(cardId)
   .then((res) => {
