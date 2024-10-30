@@ -87,7 +87,7 @@ function handleNewPlaceSubmit(placesList, createCard) {
         const card = {name: cardNameInput.value, link: urlInput.value}
         addNewCard(card) 
         .then((element) => {
-            const newCard = createCard(element, cardLike, сardDelete, openCard, userId);
+            const newCard = createCard(element, cardLike, cardDelete, openCard, userId);
         placesList.prepend(newCard);
         formNewPlace.reset();
         closeModal(popupNewCard);
@@ -110,15 +110,15 @@ function openCard (card) {
 }
 
 //Обработчик удаления карточки
-function сardDelete(card, id){
+function cardDelete(id, card){
     cardElement = card
     cardId = id
     openModal(popupDelete);   
   } 
 
-// открытие модального окна
 popupDelete.addEventListener('submit', (evt) => {
     evt.preventDefault()
+    evt.submitter.textContent = 'Удаление...'
         deleteCard(cardId)
     .then(() => {
         cardElement.remove()
@@ -148,7 +148,7 @@ avatarImage.addEventListener('click', function(){
     clearValidation(formAvatar, validationConfig);
 })
 
-handleNewPlaceSubmit(placesList, createCard, сardDelete);
+handleNewPlaceSubmit(placesList, createCard, cardDelete);
 
 enableValidation(validationConfig);
     
@@ -160,7 +160,7 @@ Promise.all([getInitialCards(), getUserData()])
             avatarImage.style.backgroundImage = `url(${data[1].avatar})`;
             
             data[0].forEach((element) => {
-                placesList.append(createCard(element, cardLike, сardDelete, openCard, userId ));
+                placesList.append(createCard(element, cardLike, cardDelete, openCard, userId ));
             })
 
     })
