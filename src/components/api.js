@@ -6,19 +6,21 @@ export const config = {
   }
 };
 
+const handleResponse = (res) => {
+  if(res.ok) {
+      return res.json();
+  } else {
+      return Promise.reject(`Ошибка: ${res.status}`)
+  }
+}
+
 // Загрузка карточек с сервера
-export function getInitialCard() {
+export function getInitialCards() {
   return fetch (`${config.baseUrl}/cards`, {
       method: 'GET',
       headers: config.headers
   })
-  .then(res => {
-    if(res.ok) {
-        return res.json();
-    } else {
-        return Promise.reject(`Ошибка: ${res.status}`)
-    }
-  })
+  .then(handleResponse)
 }
 
 export const getUserData = () => {
@@ -26,13 +28,7 @@ export const getUserData = () => {
       method: 'GET',
       headers: config.headers
   })
-  .then(res => {
-    if(res.ok) {
-        return res.json();
-    } else {
-        return Promise.reject(`Ошибка: ${res.status}`)
-    }
-  })  
+  .then(handleResponse)
 } 
 
 // Редактирование профиля
@@ -42,13 +38,7 @@ export const editUserProfile = (data) => {
       headers: config.headers,
       body: JSON.stringify(data)
   })
-  .then(res => {
-    if(res.ok) {
-        return res.json();
-    } else {
-        return Promise.reject(`Ошибка: ${res.status}`)
-    }
-  })
+  .then(handleResponse)
 }
 
 // Добавление новой карточки
@@ -61,13 +51,7 @@ export const addNewCard = (card) => {
           link: card.link
       })
   })
-  .then(res => {
-    if(res.ok) {
-        return res.json();
-    } else {
-        return Promise.reject(`Ошибка: ${res.status}`)
-    }
-  })
+  .then(handleResponse)
 }
 
 // Удаление карточки
@@ -76,13 +60,7 @@ export const deleteCard = (cardId) => {
       method: 'DELETE',
       headers: config.headers
   }) 
-  .then(res => {
-    if(res.ok) {
-        return res.json();
-    } else {
-        return Promise.reject(`Ошибка: ${res.status}`)
-    }
-  })
+  .then(handleResponse)
 }
 
 // Постановка лайка
@@ -93,13 +71,7 @@ export const addLike = (cardId) => {
       headers: config.headers
   }
 )
-  .then(res => {
-    if(res.ok) {
-        return res.json();
-    } else {
-        return Promise.reject(`Ошибка: ${res.status}`)
-    }
-  })
+  .then(handleResponse)
 }
 
 // Снятие лайка
@@ -122,11 +94,5 @@ export const updateAvatar = (data) => {
           avatar: data
       })
   })
-  .then(res => {
-    if(res.ok) {
-        return res.json();
-    } else {
-        return Promise.reject(`Ошибка: ${res.status}`)
-    }
-  })
+  .then(handleResponse)
 }

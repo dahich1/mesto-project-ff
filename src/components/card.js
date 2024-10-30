@@ -3,7 +3,7 @@ import { openModal } from "./modal.js";
 import { addLike, deleteLike } from "./api.js";
 
 // Создание карточки
-export function createCard (element, cardLike, deleteMyCard, openCard, userId) {
+export function createCard (element, cardLike, cardDelete, openCard, userId) {
     const cardTemplate = document.querySelector('#card-template');
     const cardElement = cardTemplate.content.querySelector('.places__item').cloneNode(true);
     const cardTitle = cardElement.querySelector('.card__title');
@@ -24,7 +24,9 @@ export function createCard (element, cardLike, deleteMyCard, openCard, userId) {
     if(element.owner._id !== userId) {
         deleteButton.classList.add('card__delete-button-hidden');
     } else {
-        deleteButton.addEventListener('click', () => CardDelete(cardId, cardElement, deleteMyCard))
+        deleteButton.addEventListener('click', () => {
+            cardDelete(cardId, cardElement)
+        } )
     }
 
     cardLikeButton.addEventListener('click', function() {
@@ -49,16 +51,4 @@ export function cardLike (cardLikeButton, cardId, cardLikesCounter) {
   .catch((err) => {
       console.log(err)
   })    
-}
-
-//Обработчик удаления карточки
-function CardDelete (cardId, cardElement, deleteMyCard) {
-  const popupDelete = document.querySelector('.popup__type_delete');
-  const formDelete = document.forms['delete-card'];
-  formDelete.addEventListener('submit', (evt) => {
-      evt.preventDefault();
-      evt.submitter.textContent = 'Удаление...'
-       deleteMyCard(cardId, cardElement, evt)
-      })
-  openModal(popupDelete);   
 }

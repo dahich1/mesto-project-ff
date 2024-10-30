@@ -2,7 +2,7 @@ import './pages/index.css';
 import {createCard, cardLike} from './components/card.js';
 import {openModal, closeModal} from './components/modal.js';
 import {enableValidation, clearValidation} from './components/validation.js';
-import {addNewCard, editUserProfile, getInitialCard, getUserData, updateAvatar, deleteCard } from './components/api.js';
+import {addNewCard, editUserProfile, getInitialCards, getUserData, updateAvatar, deleteCard } from './components/api.js';
 
 // @todo: Темплейт карточки
 // const cardTemplate = document.querySelector('#card-template');
@@ -26,6 +26,7 @@ const popupImage = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
 // удаление карточки
 const popupDelete = document.querySelector('.popup__type_delete');
+const formDelete = document.forms['delete-card'];
 // аватар профиля
 const avatarImage = document.querySelector('.profile__image');
 const popupAvatar = document.querySelector('.popup_type_avatar');
@@ -40,6 +41,8 @@ const validationConfig = {
     errorClass: 'popup__error_visible'
 }; 
 let userId = '';
+let cardId = '';
+let cardElement = '';
 
 //Функция редактирование аватара
 formAvatar.addEventListener('submit', function(evt) {
@@ -84,7 +87,7 @@ function handleNewPlaceSubmit(placesList, createCard) {
         const card = {name: cardNameInput.value, link: urlInput.value}
         addNewCard(card) 
         .then((element) => {
-            const newCard = createCard(element, cardLike, deleteMyCard, openCard, userId);
+            const newCard = createCard(element, cardLike, сardDelete, openCard, userId);
         placesList.prepend(newCard);
         formNewPlace.reset();
         closeModal(popupNewCard);
@@ -99,27 +102,33 @@ function handleNewPlaceSubmit(placesList, createCard) {
 }  
 
 // Функция открытия картинки
-export function openCard (card) {
+function openCard (card) {
     openModal(popupModalImage);
     popupCaption.textContent = card.name;
     popupImage.src = card.link;
     popupImage.alt = card.name;
 }
 
-// Функция удаления карточки
-export function deleteMyCard(cardId, cardElement, evt) {   
-    deleteCard(cardId)
-    .then(() => { 
+//Обработчик удаления карточки
+function сardDelete(card, id){
+    cardElement = card
+    cardId = id
+    openModal(popupDelete);   
+  } 
+
+// открытие модального окна
+popupDelete.addEventListener('submit', (evt) => {
+    evt.preventDefault()
+        deleteCard(cardId)
+    .then(() => {
         cardElement.remove()
         closeModal(popupDelete)
     })
-        .catch((err) => {
+    .catch((err) => {
         console.log(err)
     })
-    .finally(() => {
-        evt.submitter.textContent = 'Да'
-    })
-}
+})
+
 
 // открытие модального окна
 buttonEditprofile.addEventListener('click', function(){
@@ -139,11 +148,11 @@ avatarImage.addEventListener('click', function(){
     clearValidation(formAvatar, validationConfig);
 })
 
-handleNewPlaceSubmit(placesList, createCard, deleteMyCard);
+handleNewPlaceSubmit(placesList, createCard, сardDelete);
 
 enableValidation(validationConfig);
     
-Promise.all([getInitialCard(), getUserData()])
+Promise.all([getInitialCards(), getUserData()])
     .then((data) => {
             userId = data[1]._id
             profileTitle.textContent = data[1].name
@@ -151,7 +160,7 @@ Promise.all([getInitialCard(), getUserData()])
             avatarImage.style.backgroundImage = `url(${data[1].avatar})`;
             
             data[0].forEach((element) => {
-                placesList.append(createCard(element, cardLike, deleteMyCard, openCard, userId ));
+                placesList.append(createCard(element, cardLike, сardDelete, openCard, userId ));
             })
 
     })
